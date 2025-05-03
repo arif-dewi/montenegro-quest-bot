@@ -1,8 +1,8 @@
 const messages = {
   welcome: {
-    me: "🗝️ Dobrodošao u avanturu 'Tajna Budvanskog Svetionika'!\n\nSpreman za istraživanje tragova, zagonetki i morske misterije?\nPritisni ▶️ da započneš potragu!",
-    ru: "🗝️ Добро пожаловать в квест 'Тайна Будванского Маяка'!\n\nТы готов разгадать загадки, пройти по следам древней легенды и открыть секрет маяка?\nНажми ▶️, чтобы начать!",
-    en: "🗝️ Welcome to the quest 'The Secret of the Budva Lighthouse'!\n\nAre you ready to follow the clues, solve puzzles, and uncover a seaside mystery?\nTap ▶️ to begin your journey!"
+    me: "🗝️ Dobrodošao u avanturu 'Tajna Budvanskog Svetionika'!\n\nSpreman za istraživanje tragova, zagonetki i morske misterije?!",
+    ru: "🗝️ Добро пожаловать в квест 'Тайна Будванского Маяка'!\n\nТы готов разгадать загадки, пройти по следам древней легенды и открыть секрет маяка?",
+    en: "🗝️ Welcome to the quest 'The Secret of the Budva Lighthouse'!\n\nAre you ready to follow the clues, solve puzzles, and uncover a seaside mystery?"
   },
   chooseLang: {
     me: "🌍 Odaberi jezik da nastavimo:",
