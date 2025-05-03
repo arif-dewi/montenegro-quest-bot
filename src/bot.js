@@ -1,8 +1,11 @@
 require('dotenv').config();
-const { Telegraf } = require('telegraf');
+const { Telegraf, Markup } = require('telegraf');
 const fs = require('fs');
 const express = require('express');
 const app = express();
+const { generateCertificate } = require('./generateCertificate');
+const { steps } = require('./steps');
+const { messages } = require('./messages');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const WEBHOOK_URL = process.env.WEBHOOK_URL;
@@ -13,10 +16,13 @@ const QUEST_TITLE = {
   en: "🗝️ *Quest: Signal from the Lighthouse*"
 };
 
-const steps = [/* ... */]; // Сюжетные шаги (как мы сделали в предыдущих версиях)
-const messages = { /* ... */ }; // Все сообщения
 const userProgress = {};
 const userFeedback = {};
+
+const mainKeyboard = Markup.keyboard([
+  ['▶️ Начать квест'],
+  ['🔁 Сброс', '❓ Помощь']
+]).resize();
 
 function t(id, lang) {
   return messages[id]?.[lang] || "⚠️ Missing translation";
@@ -34,21 +40,20 @@ function matches(input, expectedPatterns) {
   });
 }
 
-bot.start(async (ctx) => {
+bot.start((ctx) => {
+  ctx.reply('🗝️ Добро пожаловать в квест "Сигнал с Маяка"!\n\nНажми ▶️ «Начать квест», чтобы начать приключение.', mainKeyboard);
+});
+
+bot.hears('▶️ Начать квест', (ctx) => {
   const id = ctx.from.id;
-  userProgress[id] = { step: 0, lang: 'en' };
-  ctx.reply(t('chooseLang', 'en'), {
+  userProgress[id] = { step: 0, lang: 'ru' }; // default lang ru
+  ctx.reply(t('chooseLang', 'ru'), {
     reply_markup: {
       keyboard: [['🇲🇪 Crnogorski'], ['🇷🇺 Русский'], ['🇬🇧 English']],
       one_time_keyboard: true,
       resize_keyboard: true
     }
   });
-
-  // TO TEST
-  const name = ctx.from.first_name || 'Explorer';
-  const cert = await generateCertificate(name, lang);
-  await ctx.replyWithPhoto({ source: cert }, { caption: '🏆' });
 });
 
 bot.hears(['🇲🇪 Crnogorski', '🇷🇺 Русский', '🇬🇧 English'], (ctx) => {
@@ -64,6 +69,22 @@ bot.hears(['🇲🇪 Crnogorski', '🇷🇺 Русский', '🇬🇧 English']
   ctx.reply(messages.welcome[lang]);
   ctx.reply(steps[0].story[lang], { parse_mode: 'Markdown' });
   ctx.reply(steps[0].question[lang]);
+});
+
+bot.hears('🔁 Сброс', (ctx) => {
+  const id = ctx.from.id;
+  delete userProgress[id];
+  ctx.reply('🔄 Прогресс сброшен. Нажми ▶️ «Начать квест», чтобы начать заново.', mainKeyboard);
+});
+
+bot.hears('❓ Помощь', (ctx) => {
+  ctx.reply(
+    `📜 Это приключенческий квест по Будве.\n\n` +
+    `Ты получаешь подсказки, следуешь по реальным локациям и отвечаешь на загадки.\n\n` +
+    `🧭 Для прохождения тебе нужно:\n• Быть в Будве (или смотреть Google Maps)\n• Читать подсказки внимательно\n• Прислать правильный ответ или фото\n\n` +
+    `🏁 В конце — грамота и благодарность!`,
+    mainKeyboard
+  );
 });
 
 bot.on('text', (ctx) => {
@@ -133,10 +154,10 @@ bot.on('photo', async (ctx) => {
       }
     });
 
-    const name = ctx.from.first_name || 'Explorer';
+    const name = ctx.from.first_name || ctx.from.username || 'Explorer';
     const cert = await generateCertificate(name, lang);
 
-    await ctx.replyWithPhoto({ source: cert }, { caption: '🏆' });
+    await ctx.replyWithPhoto({ source: cert }, { caption: `🏆 ${name}, you’ve completed the quest!` });
   } else {
     ctx.reply("🤔 Сейчас не требуется фото. Ответь на загадку текстом.");
   }
@@ -144,7 +165,6 @@ bot.on('photo', async (ctx) => {
 
 bot.launch();
 
-// 🟡 VERY SIMPLE PING TO KEEP THE SERVICE ALIVE
 setInterval(() => {
   console.log(`[${new Date().toISOString()}] Keep-alive ping`);
   require('https').get(WEBHOOK_URL, (res) => {
@@ -152,9 +172,8 @@ setInterval(() => {
   }).on('error', (err) => {
     console.log(`[${new Date().toISOString()}] Ping error: ${err.message}`);
   });
-}, 10 * 60 * 1000); // 10 minutes
+}, 10 * 60 * 1000);
 
-// 🔵 EXPRESS SERVER (Required for platforms like Render/Glitch)
 const PORT = process.env.PORT || 3000;
 app.get('/', (_, res) => res.send('🌍 Budva Quest Bot is alive'));
 app.listen(PORT, () => {
