@@ -1,4 +1,4 @@
-export const steps = [
+const steps = [
   {
     story: {
       me: "📜 *Poglavlje 1: Oluja Počinje*\n\nDobijaš staro pismo. Papir miriše na so, a reči su zbrkane:\n\n'...ako ovo čitaš, možda je već kasno... svetionik više ne ćuti... ja sam zatvorio vrata, ali ključ je tvoj... prati lava...'\n\nNalaziš se kod južnih vrata Starog grada. Iznad luka — kameni lav. Nema zvuka, ali on gleda pravo kroz tebe...",
@@ -52,3 +52,5 @@ export const steps = [
     answer: "photo"
   }
 ];
+
+module.exports = { steps };

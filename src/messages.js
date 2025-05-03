@@ -1,4 +1,4 @@
-export const messages = {
+const messages = {
   welcome: {
     me: "Dobrodošao u avanturu 'Tajna Budvanskog Svetionika'!",
     ru: "Добро пожаловать в квест 'Тайна Будванского Маяка'!",
@@ -40,3 +40,5 @@ export const messages = {
     en: "❤️ Thanks for your feedback! See you again soon!"
   }
 };
+
+module.exports = { messages };
