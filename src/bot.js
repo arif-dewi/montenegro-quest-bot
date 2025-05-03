@@ -107,13 +107,13 @@ bot.hears(['▶️ Start Quest', '▶️ Начать квест'], (ctx) => {
 bot.hears(['🔁 Reset', '🔁 Сброс'], (ctx) => {
   const id = ctx.from.id;
   delete userProgress[id];
-  ctx.reply('🔄 Progress reset. Tap ▶️ to start again.', mainKeyboard);
+  ctx.reply('🔄 Progress reset. Tap ▶️ to start again.', keyboard);
 });
 
 bot.hears(['❓ Help', '❓ Помощь'], (ctx) => {
   const id = ctx.from.id;
   const lang = userProgress[id]?.lang || 'en';
-  ctx.reply(t('help', lang), mainKeyboard);
+  ctx.reply(t('help', lang), keyboard);
 });
 
 bot.hears(['🧪 Test Certificate', '🧪 Тест грамоты'], async (ctx) => {
