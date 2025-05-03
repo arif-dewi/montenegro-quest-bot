@@ -21,8 +21,17 @@ const userFeedback = {};
 
 const mainKeyboard = Markup.keyboard([
   ['▶️ Начать квест'],
-  ['🔁 Сброс', '❓ Помощь']
+  ['🔁 Сброс', '❓ Помощь'],
+  ['🧪 Тест грамоты']
 ]).resize();
+
+// TODO: REMOVE after testing
+bot.hears('🧪 Тест грамоты', async (ctx) => {
+  const lang = userProgress[ctx.from.id]?.lang || 'en';
+  const name = ctx.from.first_name || ctx.from.username || 'Explorer';
+  const cert = await generateCertificate(name, lang);
+  await ctx.replyWithPhoto({ source: cert }, { caption: `🧪 Грамота для теста, ${name}` });
+});
 
 function t(id, lang) {
   return messages[id]?.[lang] || "⚠️ Missing translation";
