@@ -92,20 +92,23 @@ bot.hears(['🇲🇪 Crnogorski', '🇷🇺 Русский', '🇬🇧 English']
     '🇬🇧 English': 'en'
   };
   const lang = langMap[ctx.message.text];
-  userProgress[id] = { step: 0, lang };
+  userProgress[id] = { step: 0, lang, started: false };
 
-  // Send messages in sequence with proper delays to maintain order
   await ctx.reply(QUEST_TITLE[lang], { parse_mode: 'Markdown' });
-
-  // Add a delay to ensure messages appear in correct order
-  await new Promise(resolve => setTimeout(resolve, 100));
   await ctx.reply(messages.welcome[lang]);
+  await ctx.reply(t('press_to_start', lang), keyboard.main(lang));
+});
 
-  // Add another delay before sending the story
-  await new Promise(resolve => setTimeout(resolve, 500));
+// Handle the start button
+bot.hears(/^▶️/, async (ctx) => {
+  const id = ctx.from.id;
+  const user = userProgress[id];
+  if (!user || user.started) return;
+
+  const lang = user.lang;
+  user.started = true;
+
   await ctx.reply(steps[0].story[lang], { parse_mode: 'Markdown' });
-
-  // Final delay before the question
   await new Promise(resolve => setTimeout(resolve, 300));
   await ctx.reply(steps[0].question[lang], keyboard.main(lang));
 });
