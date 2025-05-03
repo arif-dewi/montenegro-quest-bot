@@ -186,5 +186,5 @@ setInterval(() => {
 const PORT = process.env.PORT || 3000;
 app.get('/', (_, res) => res.send('🌍 Budva Quest Bot is alive'));
 app.listen(PORT, () => {
-  console.log(`🌻 calm_comrade запущен через Webhook на порту ${PORT}`);
+  console.log(`montenegro-quest-bot запущен через Webhook на порту ${PORT}`);
 });
