@@ -340,20 +340,30 @@ app.get('/health', (_, res) => {
 });
 
 // Start bot
+// ==== Запуск бота с поддержкой Webhook или Polling ====
+
+const WEBHOOK_PATH = `/bot${BOT_TOKEN}`;
+const FULL_WEBHOOK_URL = WEBHOOK_URL ? `${WEBHOOK_URL}${WEBHOOK_PATH}` : null;
+
 (async () => {
   try {
-    await bot.launch();
-    console.log('Bot started successfully');
+    if (FULL_WEBHOOK_URL) {
+      await bot.telegram.setWebhook(FULL_WEBHOOK_URL);
+      app.use(bot.webhookCallback(WEBHOOK_PATH));
+      console.log(`🚀 Webhook установлен: ${FULL_WEBHOOK_URL}`);
+    } else {
+      await bot.launch();
+      console.log('🚀 Бот запущен в режиме polling');
+    }
 
     app.listen(PORT, () => {
-      console.log(`montenegro-quest-bot запущен через Webhook на порту ${PORT}`);
+      console.log(`🌻 montenegro-quest-bot слушает порт ${PORT}`);
     });
   } catch (error) {
-    console.error(`Failed to start bot: ${error.message}`);
+    console.error(`❌ Ошибка запуска бота: ${error.message}`);
     process.exit(1);
   }
 })();
 
-// Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
