@@ -30,9 +30,14 @@ const keyboard = {
    */
   main: (lang) =>
     Markup.keyboard([
+      [messages.reset[lang]],
+      [messages.help[lang]],
+    ]).resize(),
+
+  start: (lang) =>
+    Markup.keyboard([
       [messages.startButton[lang]],
-      [messages.reset[lang], messages.help[lang]],
-      [messages.test[lang]],
+      [messages.help[lang]],
     ]).resize(),
 
   lang: Markup.keyboard([

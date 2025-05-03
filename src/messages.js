@@ -1,96 +1,69 @@
 const messages = {
   welcome: {
-    me: "🗝️ Dobrodošao u avanturu 'Tajna Budvanskog Svetionika'!\n\nSpreman za istraživanje tragova, zagonetki i morske misterije?!",
-    ru: "🗝️ Добро пожаловать в квест 'Тайна Будванского Маяка'!\n\nТы готов разгадать загадки, пройти по следам древней легенды и открыть секрет маяка?",
-    en: "🗝️ Welcome to the quest 'The Secret of the Budva Lighthouse'!\n\nAre you ready to follow the clues, solve puzzles, and uncover a seaside mystery?"
+    me: "🗝️ Dobrodošao u avanturu 'Tajna Budvanskog Svetionika'!\n\nLegenda te poziva... Hoćeš li krenuti putem zagonetki, starih simbola i morske svetlosti?",
+    ru: "🗝️ Добро пожаловать в квест 'Тайна Будванского Маяка'!\n\nЛегенда зовёт... Готов пройти путь загадок, древних символов и морского света?",
+    en: "🗝️ Welcome to the quest 'The Secret of the Budva Lighthouse'!\n\nA legend calls... Will you follow the path of riddles, ancient signs, and the light of the sea?"
   },
   chooseLang: {
-    me: "🌍 Odaberi jezik da nastavimo:",
-    ru: "🌍 Пожалуйста, выбери язык:",
+    me: "🌍 Odaberi jezik da započneš potragu:",
+    ru: "🌍 Пожалуйста, выбери язык для начала:",
     en: "🌍 Please choose your language to begin:"
   },
   help: {
-    me: `📜 Dobrodošao u interaktivnu potragu kroz Budvu!
-
-Prati tragove, rješavaj zagonetke i istražuj stvarne lokacije.
-
-🧭 Potrebno ti je:
-• Da si u Budvi (ili koristiš Google Maps)
-• Da čitaš pažljivo
-• Da odgovaraš na pitanja ili šalješ fotografije
-
-🏁 Na kraju te čeka zahvalnica i digitalni sertifikat!`,
-    ru: `📜 Это приключенческий квест по Будве!
-
-Следуй подсказкам, разгадывай загадки и исследуй реальные локации.
-
-🧭 Тебе нужно:
-• Быть в Будве (или использовать Google Maps)
-• Читать внимательно
-• Отвечать на вопросы или присылать фото
-
-🏁 В финале — благодарность и цифровой сертификат!`,
-    en: `📜 This is an interactive quest around Budva!
-
-Follow the clues, solve puzzles, and explore real locations.
-
-🧭 You will need:
-• To be in Budva (or use Google Maps)
-• Read carefully
-• Send correct answers or photos
-
-🏁 At the end — a thank you and digital certificate!`
+    me: `📜 Interaktivna potraga vodi te kroz mističnu Budvu.\n\nPrati znakove, rješavaj zagonetke i otkrivaj stvarne lokacije.\n\n🧭 Treba ti: \n• Da budeš u Budvi (ili koristiš Google Maps)\n• Pažljivo čitanje\n• Odgovori ili fotografije\n\n🏁 Na kraju te čeka digitalni sertifikat i osvrt svetionika.`,
+    ru: `📜 Этот квест — погружение в таинственную Будву.\n\nСледуй за подсказками, решай загадки, исследуй реальные места.\n\n🧭 Что нужно: \n• Быть в Будве (или использовать Google Maps)\n• Читать внимательно\n• Отвечать или присылать фото\n\n🏁 В финале — цифровой сертификат и свет маяка.`,
+    en: `📜 This interactive quest will guide you through mystical Budva.\n\nFollow clues, solve puzzles, and explore real locations.\n\n🧭 You’ll need:\n• To be in Budva (or use Google Maps)\n• Careful reading\n• Answers or photos\n\n🏁 At the end — a digital certificate and the lighthouse’s light.`
   },
   correct: {
-    me: "✅ Tačno! Sledeća zagonetka stiže:",
-    ru: "✅ Верно! Вперёд к следующей загадке:",
-    en: "✅ Correct! Here comes your next puzzle:"
+    me: "✅ Tačno! Sledeća stranica tvoje priče:",
+    ru: "✅ Верно! Следующая страница легенды:",
+    en: "✅ Correct! The next page of your story unfolds:"
   },
   wrong: {
-    me: "❌ Nije tačno. Pogledaj još jednom i pokušaj ponovo.",
-    ru: "❌ Неправильно. Попробуй ещё раз. Подумай внимательнее.",
-    en: "❌ That's not correct. Think again and try once more."
+    me: "❌ Nešto ne štima... Pogledaj još jednom i pokušaj ponovo.",
+    ru: "❌ Что-то не так... Присмотрись и попробуй снова.",
+    en: "❌ Not quite right... Look again and try once more."
   },
   finished: {
-    me: "🎉 Čestitamo! Završen je zadnji korak tvoje avanture.",
-    ru: "🎉 Поздравляем! Ты прошёл последнюю главу приключения.",
-    en: "🎉 Congratulations! You've completed the final chapter of your journey."
+    me: "🎉 Čestitamo! Legenda te pamti kao onog koji je stigao do kraja.",
+    ru: "🎉 Поздравляем! Легенда запомнит тебя как того, кто дошёл до конца.",
+    en: "🎉 Congratulations! The legend will remember you as the one who reached the end."
   },
   feedback_intro: {
-    me: "⭐ Kako ti se svidjela potraga? Odaberi ocjenu od 1 do 5:",
+    me: "⭐ Kako ti se svidjela potraga? Ocijeni je od 1 do 5:",
     ru: "⭐ Как тебе квест? Поставь оценку от 1 до 5:",
-    en: "⭐ How was the quest? Give it a rating from 1 to 5:"
+    en: "⭐ How did you like the quest? Rate it from 1 to 5:"
   },
   thanks_feedback: {
-    me: "🙏 Hvala! Možeš dodati i komentar, ako želiš.",
-    ru: "🙏 Спасибо! Теперь можешь оставить комментарий, если хочешь.",
-    en: "🙏 Thanks! You can also leave a comment if you'd like."
+    me: "🙏 Hvala ti! Ako želiš, možeš ostaviti i komentar.",
+    ru: "🙏 Спасибо! Если хочешь, можешь оставить комментарий.",
+    en: "🙏 Thank you! You can leave a comment if you'd like."
   },
   end_feedback: {
-    me: "❤️ Hvala na povratnoj informaciji! Vidimo se u sledećoj potrazi!",
-    ru: "❤️ Спасибо за отзыв! До встречи в следующем приключении!",
-    en: "❤️ Thanks for your feedback! See you in the next adventure!"
+    me: "❤️ Hvala na tvojoj poruci! Sledeća potraga te već posmatra iz magle...",
+    ru: "❤️ Спасибо за отзыв! Следующее приключение уже смотрит на тебя из тумана...",
+    en: "❤️ Thanks for your message! The next quest already watches you from the mist..."
   },
   certificate_caption: {
-    me: "završio/la si potragu sa čašću!",
-    ru: "ты завершил(а) квест с честью!",
-    en: "you’ve completed the quest with honor!"
+    me: "završio/la si potragu sa čašću i dušom pustolova!",
+    ru: "ты завершил(а) квест с честью и душой искателя!",
+    en: "you’ve completed the quest with honor and the heart of a seeker!"
   },
   send_photo_prompt: {
-    me: "📷 Pošalji fotografiju!",
-    ru: "📷 Пришли фотографию!",
-    en: "📷 Send a photo!"
+    me: "📷 Pošalji fotografiju! Ona je ključ završetka.",
+    ru: "📷 Пришли фотографию! Это ключ к финалу.",
+    en: "📷 Send a photo! It’s the final key."
   },
   reset: {
-    me: "🔄 Tvoj napredak je obrisan. Pritisni ▶️ da počneš iznova.",
-    ru: "🔄 Прогресс сброшен. Нажми ▶️, чтобы начать заново.",
-    en: "🔄 Your progress has been reset. Tap ▶️ to start again."
+    me: "🔄 Tvoj napredak je obrisan. 🌊 Počni ispočetka ako želiš ponovo da tragaš.",
+    ru: "🔄 Прогресс сброшен. 🌊 Начни заново, если хочешь снова искать.",
+    en: "🔄 Your progress was reset. 🌊 Begin again if you wish to search anew."
   },
   language_not_recognized: {
-    me: "⚠️ Nepoznat jezik. Pokušaj ponovo:",
+    me: "⚠️ Jezik nije prepoznat. Pokušaj ponovo:",
     ru: "⚠️ Язык не распознан. Попробуй снова:",
-    en: "⚠️ Language not recognized. Please try again:"
-  },
+    en: "⚠️ Language not recognized. Try again:"
+  }
 };
 
 module.exports = { messages };

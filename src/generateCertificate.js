@@ -26,21 +26,21 @@ const generateCertificate = async (name, lang = 'en') => {
       line1: 'has successfully completed',
       line2: 'the quest',
       quest: 'Signal from\nthe Lighthouse',
-      location: '📍 Budva, Montenegro',
+      location: 'Budva, Montenegro',
     },
     ru: {
       title: 'Сертификат',
       line1: 'успешно завершил(а)',
       line2: 'квест',
       quest: 'Сигнал с\nМаяка',
-      location: '📍 Будва, Черногория',
+      location: 'Будва, Черногория',
     },
     me: {
       title: 'Sertifikat',
       line1: 'uspješno je završio/la',
       line2: 'potragu',
       quest: 'Signal sa\nSvetionika',
-      location: '📍 Budva, Crna Gora',
+      location: 'Budva, Crna Gora',
     }
   };
 
@@ -80,7 +80,7 @@ const generateCertificate = async (name, lang = 'en') => {
     lang === 'ru' ? 'ru-RU' : lang === 'me' ? 'sr-ME' : 'en-US',
     options
   );
-  ctx.fillText(`📅 ${dateStr}`, centerX, 680);
+  ctx.fillText(`${dateStr}`, centerX, 680);
 
   return canvas.toBuffer();
 };

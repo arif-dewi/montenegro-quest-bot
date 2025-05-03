@@ -95,8 +95,7 @@ bot.hears(['🇲🇪 Crnogorski', '🇷🇺 Русский', '🇬🇧 English']
   userProgress[id] = { step: 0, lang, started: false };
 
   await ctx.reply(QUEST_TITLE[lang], { parse_mode: 'Markdown' });
-  await ctx.reply(messages.welcome[lang]);
-  await ctx.reply(t('press_to_start', lang), keyboard.main(lang));
+  await ctx.reply(messages.welcome[lang], keyboard.start(lang))
 });
 
 // Handle the start button
@@ -125,7 +124,7 @@ bot.hears(/^🌊\s.+$/, (ctx) => {
   // Start quest from the beginning but keep language
   userProgress[id] = { step: 0, lang: user.lang };
   ctx.reply(steps[0].story[user.lang], { parse_mode: 'Markdown' });
-  ctx.reply(steps[0].question[user.lang]);
+  ctx.reply(steps[0].question[user.lang], keyboard.main(user.lang));
 });
 
 bot.hears(/^🔁\s.+$/, (ctx) => {
@@ -134,7 +133,7 @@ bot.hears(/^🔁\s.+$/, (ctx) => {
   const lang = user?.lang || 'en';
 
   delete userProgress[id];
-  ctx.reply(t('reset', lang), keyboard.main(lang));
+  ctx.reply(t('reset', lang), keyboard.start(lang));
 });
 
 bot.hears(/^❓\s.+$/, (ctx) => {
@@ -157,9 +156,10 @@ bot.hears(/^🧪\s.+$/, async (ctx) => {
   });
 });
 
-bot.use(message('text'), async (ctx) => {
+bot.on(message('text'), async (ctx) => {
   const id = ctx.from.id;
   const user = userProgress[id];
+
   if (!user || !user.lang) return;
 
   const lang = user.lang;
@@ -210,7 +210,7 @@ bot.use(message('text'), async (ctx) => {
   }
 });
 
-bot.use(message('photo'), async (ctx) => {
+bot.on(message('photo'), async (ctx) => {
   const id = ctx.from.id;
   const user = userProgress[id];
   if (!user || !user.lang) return;
@@ -244,6 +244,11 @@ async function finishQuest(ctx, userId) {
   await ctx.replyWithPhoto({ source: cert }, {
     caption: `🏆 ${name}, ${t('certificate_caption', lang)}`
   });
+
+  // Reset with delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  userProgress[userId] = { step: 0, lang };
+  await ctx.reply(t('reset', lang), keyboard.start(lang));
 }
 
 if (WEBHOOK_URL) {
