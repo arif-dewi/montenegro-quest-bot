@@ -7,6 +7,7 @@ const app = express();
 const { generateCertificate } = require('./generateCertificate');
 const { steps } = require('./steps');
 const { messages } = require('./messages');
+const { keyboard } = require('./keyboard');
 
 // Validate required environment variables
 const BOT_TOKEN = process.env.BOT_TOKEN;
@@ -83,7 +84,7 @@ bot.start((ctx) => {
   }
 });
 
-bot.hears(['🇲🇪 Crnogorski', '🇷🇺 Русский', '🇬🇧 English'], (ctx) => {
+bot.hears(['🇲🇪 Crnogorski', '🇷🇺 Русский', '🇬🇧 English'], async (ctx) => {
   const id = ctx.from.id;
   const langMap = {
     '🇲🇪 Crnogorski': 'me',
@@ -92,45 +93,76 @@ bot.hears(['🇲🇪 Crnogorski', '🇷🇺 Русский', '🇬🇧 English']
   };
   const lang = langMap[ctx.message.text];
   userProgress[id] = { step: 0, lang };
-  ctx.reply(QUEST_TITLE[lang], { parse_mode: 'Markdown' });
-  ctx.reply(messages.welcome[lang]);
-  ctx.reply(steps[0].story[lang], { parse_mode: 'Markdown' });
-  ctx.reply(steps[0].question[lang]);
+
+  // Send messages in sequence with proper delays to maintain order
+  await ctx.reply(QUEST_TITLE[lang], { parse_mode: 'Markdown' });
+
+  // Add a delay to ensure messages appear in correct order
+  await new Promise(resolve => setTimeout(resolve, 100));
+  await ctx.reply(messages.welcome[lang]);
+
+  // Add another delay before sending the story
+  await new Promise(resolve => setTimeout(resolve, 500));
+  await ctx.reply(steps[0].story[lang], { parse_mode: 'Markdown' });
+
+  // Final delay before the question
+  await new Promise(resolve => setTimeout(resolve, 300));
+  await ctx.reply(steps[0].question[lang], keyboard.main(lang));
 });
 
-bot.hears(['▶️ Start Quest', '▶️ Начать квест'], (ctx) => {
+// Handle the main buttons correctly
+bot.hears(/^🌊\s.+$/, (ctx) => {
   const id = ctx.from.id;
-  userProgress[id] = { step: 0, lang: 'en' };
-  ctx.reply(t('chooseLang', 'en'), languageKeyboard);
+  const user = userProgress[id];
+  if (!user || !user.lang) {
+    ctx.reply(t('chooseLang', 'en'), languageKeyboard);
+    return;
+  }
+
+  // Start quest from the beginning but keep language
+  userProgress[id] = { step: 0, lang: user.lang };
+  ctx.reply(steps[0].story[user.lang], { parse_mode: 'Markdown' });
+  ctx.reply(steps[0].question[user.lang]);
 });
 
-bot.hears(['🔁 Reset', '🔁 Сброс'], (ctx) => {
+bot.hears(/^🔁\s.+$/, (ctx) => {
   const id = ctx.from.id;
+  const user = userProgress[id];
+  const lang = user?.lang || 'en';
+
   delete userProgress[id];
-  ctx.reply('🔄 Progress reset. Tap ▶️ to start again.', keyboard);
+  ctx.reply(t('reset', lang), keyboard.main(lang));
 });
 
-bot.hears(['❓ Help', '❓ Помощь'], (ctx) => {
+bot.hears(/^❓\s.+$/, (ctx) => {
   const id = ctx.from.id;
-  const lang = userProgress[id]?.lang || 'en';
-  ctx.reply(t('help', lang), keyboard);
+  const user = userProgress[id];
+  const lang = user?.lang || 'en';
+
+  ctx.reply(t('help', lang), keyboard.main(lang));
 });
 
-bot.hears(['🧪 Test Certificate', '🧪 Тест грамоты'], async (ctx) => {
+bot.hears(/^🧪\s.+$/, async (ctx) => {
   const id = ctx.from.id;
-  const lang = userProgress[id]?.lang || 'en';
+  const user = userProgress[id];
+  const lang = user?.lang || 'en';
   const name = ctx.from.first_name || ctx.from.username || 'Explorer';
+
   const cert = await generateCertificate(name, lang);
-  await ctx.replyWithPhoto({ source: cert }, { caption: `🧪 Test certificate for ${name}` });
+  await ctx.replyWithPhoto({ source: cert }, {
+    caption: `🧪 Test certificate for ${name}`
+  });
 });
 
 bot.use(message('text'), async (ctx) => {
   const id = ctx.from.id;
   const user = userProgress[id];
-  if (!user) return;
+  if (!user || !user.lang) return;
+
   const lang = user.lang;
   const input = ctx.message.text;
 
+  // Handle feedback rating
   if (/⭐️ (\d)/.test(input)) {
     const rating = parseInt(input.match(/⭐️ (\d)/)[1]);
     userFeedback[id] = { rating };
@@ -138,6 +170,7 @@ bot.use(message('text'), async (ctx) => {
     return;
   }
 
+  // Handle feedback comment
   if (userFeedback[id] && !userFeedback[id].comment) {
     userFeedback[id].comment = input;
     ctx.reply(t('end_feedback', lang));
@@ -145,18 +178,27 @@ bot.use(message('text'), async (ctx) => {
     return;
   }
 
+  // Handle step answers
   const step = steps[user.step];
   if (!step) return;
+
   if (step.answer === 'photo') {
-    ctx.reply(t('expect_photo', lang));
+    ctx.reply(t('send_photo_prompt', lang));
     return;
   }
+
   if (matches(input, step.answer)) {
     user.step++;
     if (user.step < steps.length) {
-      ctx.reply(t('correct', lang));
-      ctx.reply(steps[user.step].story[lang], { parse_mode: 'Markdown' });
-      ctx.reply(steps[user.step].question[lang]);
+      await ctx.reply(t('correct', lang));
+
+      // Add delay before sending next story
+      await new Promise(resolve => setTimeout(resolve, 500));
+      await ctx.reply(steps[user.step].story[lang], { parse_mode: 'Markdown' });
+
+      // Add delay before sending question
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await ctx.reply(steps[user.step].question[lang], keyboard.main(lang));
     } else {
       await finishQuest(ctx, id);
     }
@@ -168,10 +210,12 @@ bot.use(message('text'), async (ctx) => {
 bot.use(message('photo'), async (ctx) => {
   const id = ctx.from.id;
   const user = userProgress[id];
-  if (!user) return;
+  if (!user || !user.lang) return;
+
   const lang = user.lang;
   const step = steps[user.step];
-  if (step.answer === 'photo') {
+
+  if (step && step.answer === 'photo') {
     user.step++;
     await finishQuest(ctx, id);
   } else {
@@ -182,17 +226,25 @@ bot.use(message('photo'), async (ctx) => {
 async function finishQuest(ctx, userId) {
   const user = userProgress[userId];
   const lang = user.lang;
-  ctx.reply(t('finished', lang));
-  ctx.reply(t('feedback_intro', lang), feedbackKeyboard);
+
+  await ctx.reply(t('finished', lang));
+
+  // Add delay before feedback request
+  await new Promise(resolve => setTimeout(resolve, 500));
+  await ctx.reply(t('feedback_intro', lang), feedbackKeyboard);
+
+  // Generate and send certificate with delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
   const name = ctx.from.first_name || ctx.from.username || 'Explorer';
   const cert = await generateCertificate(name, lang);
+
   await ctx.replyWithPhoto({ source: cert }, {
     caption: `🏆 ${name}, ${t('certificate_caption', lang)}`
   });
 }
 
 if (WEBHOOK_URL) {
-  const keepAliveInterval = 10 * 60 * 1000;
+  const keepAliveInterval = 10 * 60 * 1000; // 10 minutes
   setInterval(() => {
     require('https').get(WEBHOOK_URL, (res) => {
       console.log(`[KeepAlive] Ping response: ${res.statusCode}`);
