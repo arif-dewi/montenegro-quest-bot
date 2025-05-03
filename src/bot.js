@@ -264,6 +264,37 @@ if (WEBHOOK_URL) {
 
 app.get('/', (_, res) => res.send('🌍 Bot is alive'));
 app.get('/health', (_, res) => res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() }));
+app.get('/privacy', (_, res) => {
+  res.send(`
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Privacy Policy</title>
+        <style>
+          body { font-family: sans-serif; padding: 2em; max-width: 700px; margin: auto; line-height: 1.6; }
+          h1 { color: #333; }
+          hr { margin: 2em 0; }
+        </style>
+      </head>
+      <body>
+        <h1>🔒 Privacy Policy / Политика конфиденциальности / Politika Privatnosti</h1>
+
+        <p><strong>EN:</strong> This Telegram bot does not collect, store, or share any personal data. Any data (e.g., photos or answers) is used only during the current session to process the quest. After the quest, nothing is stored. Your privacy is respected.</p>
+        
+        <hr />
+        
+        <p><strong>RU:</strong> Этот Telegram-бот не собирает, не хранит и не передаёт ваши личные данные. Все ответы и фото используются только в рамках текущего квеста. После завершения — данные не сохраняются. Ваша конфиденциальность — под защитой.</p>
+        
+        <hr />
+        
+        <p><strong>ME:</strong> Ovaj Telegram bot ne prikuplja, ne čuva niti deli vaše lične podatke. Sve što pošaljete (npr. fotografije ili odgovore) koristi se samo tokom trajanja potrage. Nakon toga — ništa se ne čuva. Vaša privatnost je zagarantovana.</p>
+
+        <hr />
+        <p>Contact: @ArifDewi on Telegram if you have questions.</p>
+      </body>
+    </html>
+  `);
+});
 
 const WEBHOOK_PATH = `/bot${BOT_TOKEN}`;
 const FULL_WEBHOOK_URL = WEBHOOK_URL ? `${WEBHOOK_URL}${WEBHOOK_PATH}` : null;
