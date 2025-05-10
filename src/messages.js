@@ -29,6 +29,11 @@ const messages = {
     ru: "🎉 Поздравляем! Легенда запомнит тебя как того, кто дошёл до конца.",
     en: "🎉 Congratulations! The legend will remember you as the one who reached the end."
   },
+  thanks_quest: {
+    me: "🙏 Hvala ti na istrajnosti! Svetionik više ne ćuti.",
+    ru: "🙏 Спасибо за настойчивость! Маяк больше не молчит.",
+    en: "🙏 Thank you for your perseverance! The lighthouse no longer sleeps."
+  },
   feedback_intro: {
     me: "⭐ Kako ti se svidjela potraga? Ocijeni je od 1 do 5:",
     ru: "⭐ Как тебе квест? Поставь оценку от 1 до 5:",
@@ -48,6 +53,11 @@ const messages = {
     me: "završio/la si potragu sa čašću i dušom pustolova!",
     ru: "ты завершил(а) квест с честью и душой искателя!",
     en: "you’ve completed the quest with honor and the heart of a seeker!"
+  },
+  cert_fail: {
+    me: "⚠️ Nismo uspjeli generisati tvoj sertifikat. Pokušaj ponovo kasnije.",
+    ru: "⚠️ Не удалось создать сертификат. Попробуй позже.",
+    en: "⚠️ Failed to generate your certificate. Try again later."
   },
   send_photo_prompt: {
     me: "📷 Pošalji fotografiju! Ona je ključ završetka.",

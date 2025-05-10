@@ -1,5 +1,5 @@
 // routes/index.js
-const { mainKeyboard } = require('../keyboard');
+const { keyboard } = require('../keyboard');
 const { steps, getLang } = require('../steps');
 const { messages } = require('../messages');
 const { generateCertificate } = require('../generateCertificate');
@@ -11,6 +11,39 @@ const {
 
 function escapeMarkdownV2(text) {
   return text.replace(/([_*\[\]()~`>#+=|{}.!\\-])/g, '\\$1');
+}
+
+async function finishQuest(ctx, userId) {
+  const user = userProgress[userId];
+  const lang = user.lang;
+  const name = ctx.from.first_name || ctx.from.username || 'Explorer';
+
+  await ctx.reply(t('finished', lang));
+  await new Promise(resolve => setTimeout(resolve, 300));
+  await ctx.reply(t('thanks_quest', lang));
+
+  await new Promise(resolve => setTimeout(resolve, 500));
+  await ctx.reply(t('feedback_intro', lang), keyboard.feedback(lang));
+
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const cert = await generateCertificate(name, lang);
+
+    if (cert) {
+      await ctx.replyWithPhoto({ source: cert }, {
+        caption: `🏆 ${name}, ${t('certificate_caption', lang)}`
+      });
+    } else {
+      await ctx.reply(t('cert_fail', lang));
+    }
+  } catch (e) {
+    console.error('❌ Certificate error:', e.message);
+    await ctx.reply(t('cert_fail', lang));
+  }
+
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  userProgress[userId] = { step: 0, lang };
+  await ctx.reply(t('reset', lang), keyboard.start(lang));
 }
 
 function initRoutes(bot, db) {
@@ -56,7 +89,7 @@ function initRoutes(bot, db) {
 
       const step = steps[user.step];
       if (!step) {
-        ctx.reply('🏁 Квест завершён. Можешь начать заново.', mainKeyboard);
+        ctx.reply('🏁 Квест завершён. Можешь начать заново.', keyboard.main(lang));
         return;
       }
 
@@ -78,12 +111,7 @@ function initRoutes(bot, db) {
           await ctx.replyWithMarkdownV2(escapeMarkdownV2(nextStep.story[lang]));
           await ctx.reply(nextStep.question[lang], nextStep.keyboard);
         } else {
-          await ctx.reply('🎉 Квест завершён! Спасибо за участие.');
-          try {
-            await generateCertificate(ctx.from, db, lang);
-          } catch (e) {
-            console.error('Ошибка генерации сертификата:', e);
-          }
+          finishQuest(ctx, chatId);
         }
       } else {
         ctx.reply(step.retryMessage || '❌ Неверно. Попробуй ещё раз.');
@@ -94,7 +122,7 @@ function initRoutes(bot, db) {
     }
   });
 
-  bot.command('help', (ctx) => ctx.reply(messages.help, mainKeyboard));
+  bot.command('help', (ctx) => ctx.reply(messages.help, keyboard.main(getLang(ctx))));
   bot.command('reset', async (ctx) => {
     await setUserState(ctx.chat.id, { step: -1 });
     ctx.reply('🔁 Квест сброшен. Выбери язык заново.', langKeyboard);
