@@ -21,7 +21,7 @@ app.use(bot.webhookCallback(WEBHOOK_PATH));
 app.get('/', (_, res) => res.send('🏝 Квест-бот живой.'));
 
 // Keep-alive + запуск сервера
-keepAlive(WEBHOOK_URL);
+keepAlive(process.env.WEBHOOK_URL);
 
 // Инициализация
 (async () => {
