@@ -1,7 +1,10 @@
+// steps.js
+const { Markup } = require('telegraf');
+
 const steps = [
   {
     story: {
-      me: "📜 *Poglavlje I: Zagonetno Pismo*\n\nIz daleke prošlosti, u tvoje ruke stiže pismo. Mastilo je razliveno, papir miriše na more.\n\n'...ako čitaš ovo, možda je već kasno... svetionik više ne ćuti... ja sam zaključao vrata, ali ključ je tvoj... prati lava.'\n\nStojiš pred južnim vratima Starog grada. Iznad luka — kameni lav. Njegove oči kao da čuvaju priču. A iznad njega — stari sat.\n",
+      me: "📜 *Poglavlje I: Zagonetno Pismo*\n\nIz daleke prošlosti, u tvoje ruke stiže pismo. Mastilo je razliveno, papir miriše na more.\n\n'...ako čitaš ovo, možda je već kasno... svetionik više ne ćuti... ja sam zaključao vrata, ali ključ je tvoj... prati lava.'\n\nStojiš pred južnim vratima Starog grada. Iznad luka — kameni lav. Njegove oči kao da čuvaju priču. A iznad njega — stari sat.",
       ru: "📜 *Глава I: Таинственное письмо*\n\nИз глубины веков тебе попадает письмо. Чернила размазаны, бумага пахнет солью.\n\n'...если ты это читаешь, возможно, уже поздно... маяк больше не молчит... я запер дверь, но ключ — у тебя... следуй за львом.'\n\nТы стоишь у южных ворот Старого города. Над аркой — каменный лев. Его взгляд хранит тайну. А над ним — старые часы.",
       en: "📜 *Chapter I: The Cryptic Letter*\n\nFrom a distant past, a letter finds your hands. The ink is smeared, the paper smells of sea salt.\n\n'...if you're reading this, it may already be too late... the lighthouse no longer sleeps... I sealed the door, but the key is yours... follow the lion.'\n\nYou stand before the southern gate of Old Town. Above the arch — a stone lion. Its gaze guards a secret. And just above — an old clock."
     },
@@ -53,4 +56,11 @@ const steps = [
   }
 ];
 
-module.exports = { steps };
+function getLang(ctx) {
+  const lang = ctx?.from?.language_code || 'en';
+  if (/^ru/.test(lang)) return 'ru';
+  if (/^sr|me|bs|hr/.test(lang)) return 'me';
+  return 'en';
+}
+
+module.exports = { steps, getLang };
