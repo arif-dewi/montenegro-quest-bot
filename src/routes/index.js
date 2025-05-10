@@ -73,7 +73,7 @@ function initRoutes(bot, db) {
 
     const step = steps[0];
     await ctx.replyWithMarkdownV2(escapeMarkdownV2(step.story[lang]));
-    await ctx.reply(step.question[lang], step.keyboard);
+    await ctx.reply(step.question[lang], keyboard.main(lang));
   });
 
   bot.on(['text', 'photo'], async (ctx) => {
@@ -109,7 +109,7 @@ function initRoutes(bot, db) {
 
         if (nextStep) {
           await ctx.replyWithMarkdownV2(escapeMarkdownV2(nextStep.story[lang]));
-          await ctx.reply(nextStep.question[lang], nextStep.keyboard);
+          await ctx.reply(nextStep.question[lang], keyboard.main(lang));
         } else {
           finishQuest(ctx, chatId);
         }

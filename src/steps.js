@@ -19,8 +19,11 @@ const steps = [
       ru: "⏰ Верно! Часы остановились навсегда...",
       en: "⏰ Correct! The clock is frozen in time..."
     },
-    keyboard: Markup.keyboard([['Подсказка']]).resize(),
-    retryMessage: '👀 Присмотрись внимательнее. Что находится над воротами?'
+    retryMessage: {
+      me: "👀 Pogledaj još jednom. Šta vidiš iznad vrata?",
+      ru: "👀 Присмотрись внимательнее. Что находится над воротами?",
+      en: "👀 Look again. What’s above the gate?"
+    },
   },
   {
     story: {
@@ -39,8 +42,11 @@ const steps = [
       ru: "🙏 Верно. Стена помнит твой шаг...",
       en: "🙏 Correct. The wall remembers you..."
     },
-    keyboard: Markup.keyboard([['Подсказка']]).resize(),
-    retryMessage: '🗿 Найди надпись над мозаикой. Что там первое?'
+    retryMessage: {
+      me: "🗿 Nađi natpis iznad mozaika. Koja je prva riječ?",
+      ru: "🗿 Найди надпись над мозаикой. Что там первое?",
+      en: "🗿 Find the inscription above the mosaic. What’s the first word?"
+    }
   },
   {
     story: {
@@ -59,8 +65,11 @@ const steps = [
       ru: "⚓ Точно. Но якорь мечтает о свободе...",
       en: "⚓ Correct. But the anchor longs for freedom..."
     },
-    keyboard: Markup.keyboard([['Подсказка']]).resize(),
-    retryMessage: '💣 Почти. Вспомни: сколько ядер лежит у пушки?'
+    retryMessage: {
+      me: "🔗 Pogledaj sidro. Koliko lanaca ga drži?",
+      ru: "🔗 Посмотри на якорь. Сколько цепей его держит?",
+      en: "🔗 Look at the anchor. How many chains hold it?"
+    }
   },
   {
     story: {
@@ -79,8 +88,11 @@ const steps = [
       ru: "📸 Прекрасно! Маяк узнал тебя...",
       en: "📸 Beautiful! The lighthouse recognized you..."
     },
-    keyboard: Markup.keyboard([['Подсказка']]).resize(),
-    retryMessage: '📷 Отправь фото острова, вид с берега.'
+    retryMessage: {
+      me: "📷 Pošalji fotografiju ostrva — vidi se sa obale.",
+      ru: "📷 Пришли фото острова — его видно с берега.",
+      en: "📷 Send a photo of the island — it’s visible from the shore."
+    }
   }
 ];
 
