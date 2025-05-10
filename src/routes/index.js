@@ -9,6 +9,11 @@ const {
   incrementCounter,
 } = require('../db');
 
+// 🔐 Экранирование MarkdownV2
+function escapeMarkdownV2(text) {
+  return text.replace(/([_*\[\]()~`>#+=|{}.!\\-])/g, '\\$1');
+}
+
 function initRoutes(bot, db) {
   const langKeyboard = {
     reply_markup: {
@@ -35,7 +40,7 @@ function initRoutes(bot, db) {
     await incrementCounter('lang:' + lang);
 
     const step = steps[0];
-    await ctx.replyWithMarkdownV2(step.story[lang]);
+    await ctx.replyWithMarkdownV2(escapeMarkdownV2(step.story[lang]));
     await ctx.reply(step.question[lang], step.keyboard);
   });
 
@@ -51,7 +56,6 @@ function initRoutes(bot, db) {
       }
 
       const step = steps[user.step];
-
       if (!step) {
         ctx.reply('🏁 Квест завершён. Можешь начать заново.', mainKeyboard);
         return;
@@ -70,7 +74,7 @@ function initRoutes(bot, db) {
         await incrementCounter(`step:${nextStepIndex}`);
 
         if (nextStep) {
-          await ctx.replyWithMarkdownV2(nextStep.story[lang]);
+          await ctx.replyWithMarkdownV2(escapeMarkdownV2(nextStep.story[lang]));
           await ctx.reply(nextStep.question[lang], nextStep.keyboard);
         } else {
           await ctx.reply('🎉 Квест завершён!');
@@ -88,13 +92,7 @@ function initRoutes(bot, db) {
   bot.command('help', (ctx) => ctx.reply(messages.help, mainKeyboard));
   bot.command('reset', async (ctx) => {
     await setUserState(ctx.chat.id, { step: -1 });
-    ctx.reply('🔁 Квест сброшен. Выбери язык заново.', {
-      reply_markup: {
-        keyboard: [['🇷🇺 Русский'], ['🇲🇪 Crnogorski'], ['🇬🇧 English']],
-        resize_keyboard: true,
-        one_time_keyboard: true
-      }
-    });
+    ctx.reply('🔁 Квест сброшен. Выбери язык заново.', langKeyboard);
   });
 }
 
