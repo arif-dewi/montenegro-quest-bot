@@ -14,8 +14,7 @@ const CLEAR_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 // Обновляем webhook
 const WEBHOOK_PATH = `/bot${process.env.BOT_TOKEN}`;
-const WEBHOOK_URL = WEBHOOK_PATH;
-bot.telegram.setWebhook(`${WEBHOOK_URL}${WEBHOOK_PATH}`);
+bot.telegram.setWebhook(`${process.env.WEBHOOK_URL}${WEBHOOK_PATH}`);
 app.use(bot.webhookCallback(WEBHOOK_PATH));
 
 // Простая заглушка для проверки
