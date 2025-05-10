@@ -9,7 +9,6 @@ const {
   incrementCounter,
 } = require('../db');
 
-// 🔐 Экранирование MarkdownV2
 function escapeMarkdownV2(text) {
   return text.replace(/([_*\[\]()~`>#+=|{}.!\\-])/g, '\\$1');
 }
@@ -68,6 +67,8 @@ function initRoutes(bot, db) {
         : step.answer === 'photo' && isPhoto;
 
       if (isCorrect) {
+        await ctx.reply(step.success?.[lang] || '✅');
+
         const nextStepIndex = user.step + 1;
         const nextStep = steps[nextStepIndex];
         await setUserState(chatId, { step: nextStepIndex, lang });
@@ -77,8 +78,12 @@ function initRoutes(bot, db) {
           await ctx.replyWithMarkdownV2(escapeMarkdownV2(nextStep.story[lang]));
           await ctx.reply(nextStep.question[lang], nextStep.keyboard);
         } else {
-          await ctx.reply('🎉 Квест завершён!');
-          await generateCertificate(ctx.from, db);
+          await ctx.reply('🎉 Квест завершён! Спасибо за участие.');
+          try {
+            await generateCertificate(ctx.from, db, lang);
+          } catch (e) {
+            console.error('Ошибка генерации сертификата:', e);
+          }
         }
       } else {
         ctx.reply(step.retryMessage || '❌ Неверно. Попробуй ещё раз.');
