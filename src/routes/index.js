@@ -14,6 +14,7 @@ function escapeMarkdownV2(text) {
 }
 
 async function finishQuest(ctx, userId) {
+  const userProgress = await getUserState(userId);
   const user = userProgress[userId];
   const lang = user.lang;
   const name = ctx.from.first_name || ctx.from.username || 'Explorer';

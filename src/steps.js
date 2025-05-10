@@ -1,5 +1,4 @@
 // steps.js
-const { Markup } = require('telegraf');
 
 const steps = [
   {
