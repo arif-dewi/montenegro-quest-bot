@@ -24,6 +24,17 @@ async function initDb() {
       count INTEGER DEFAULT 0
     );
   `);
+
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS ${prefixed('feedback')} (
+      id SERIAL PRIMARY KEY,
+      chat_id BIGINT,
+      rating INTEGER,
+      comment TEXT,
+      lang TEXT,
+      created_at TIMESTAMP DEFAULT NOW()
+    );
+  `);
 }
 
 async function getUserState(chatId) {
@@ -76,6 +87,13 @@ async function cleanupOldUserStates(days = 30) {
   return res.rowCount;
 }
 
+async function saveFeedback(chatId, { rating, comment, lang }) {
+  await db.query(`
+    INSERT INTO ${prefixed('feedback')} (chat_id, rating, comment, lang)
+    VALUES ($1, $2, $3, $4)
+  `, [chatId, rating, comment || null, lang]);
+}
+
 module.exports = {
   db,
   prefixed,
@@ -84,5 +102,6 @@ module.exports = {
   setUserState,
   incrementCounter,
   getAnalytics,
-  cleanupOldUserStates
+  cleanupOldUserStates,
+  saveFeedback
 };
