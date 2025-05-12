@@ -65,9 +65,9 @@ const messages = {
     en: "📷 Send a photo! It’s the final key."
   },
   reset: {
-    me: "🔄 Tvoj napredak je obrisan. 🌊 Počni ispočetka ako želiš ponovo da tragaš.",
-    ru: "🔄 Прогресс сброшен. 🌊 Начни заново, если хочешь снова искать.",
-    en: "🔄 Your progress was reset. 🌊 Begin again if you wish to search anew."
+    me: "🔄 Tvoj napredak je obrisan. 🌊 Počni ispočetka ako želiš ponovo proći put.",
+    ru: "🔄 Прогресс сброшен. 🌊 Начни заново, если хочешь пройти путь снова.",
+    en: "🔄 Your progress was reset. 🌊 Begin again if you wish to walk the path once more."
   },
   language_not_recognized: {
     me: "⚠️ Jezik nije prepoznat. Pokušaj ponovo:",

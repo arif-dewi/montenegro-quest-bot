@@ -57,6 +57,9 @@ async function handleLanguageSelection(ctx) {
   await incrementCounter('lang:' + lang);
 
   const step = steps[0];
+  await ctx.reply(messages.welcome[lang] || 'Welcome to the quest!');
+  await Promise.resolve(setTimeout(() => {}, 500));
+
   await ctx.replyWithMarkdownV2(escapeMarkdownV2(step.story[lang]));
   await ctx.reply(step.question[lang], keyboard.main(lang));
 }

@@ -3,94 +3,94 @@
 const steps = [
   {
     story: {
-      me: "📜 *Poglavlje I: Zagonetno Pismo*\n\nIz daleke prošlosti, u tvoje ruke stiže pismo. Mastilo je razliveno, papir miriše na more.\n\n'...ako čitaš ovo, možda je već kasno... svetionik više ne ćuti... ja sam zaključao vrata, ali ključ je tvoj... prati lava.'\n\nStojiš pred zapadnim vratima Starog grada. Iznad luka — kameni lav. Njegove oči kao da čuvaju priču. A iznad njega — stari sat.",
-      ru: "📜 *Глава I: Таинственное письмо*\n\nИз глубины веков тебе попадает письмо. Чернила размазаны, бумага пахнет солью.\n\n'...если ты это читаешь, возможно, уже поздно... маяк больше не молчит... я запер дверь, но ключ — у тебя... следуй за львом.'\n\nТы стоишь у западных ворот Старого города. Над аркой — каменный лев. Его взгляд хранит тайну. А над ним — старые часы.",
-      en: "📜 *Chapter I: The Cryptic Letter*\n\nFrom a distant past, a letter finds your hands. The ink is smeared, the paper smells of sea salt.\n\n'...if you're reading this, it may already be too late... the lighthouse no longer sleeps... I sealed the door, but the key is yours... follow the lion.'\n\nYou stand before the western gate of Old Town. Above the arch — a stone lion. Its gaze guards a secret. And just above — an old clock."
+      me: "🏰 Poglavlje I: Vratima sve počinje\n\nKamen pod tvojim nogama već pamti hiljade koraka. Ali sada — ti si taj koji dolazi ne slučajno. Vjetar nosi miris mora i nešto... zaboravljeno.\n\nPred tobom su Sjeverna Vrata Starog grada. Bez pompe, bez čuvara. Samo ti i stari zidovi.\n\n\"Ako si spreman, uđi.\"",
+      ru: "🏰 Глава I: Всё начинается с Врат\n\nКамень под ногами хранит тысячи шагов. Но сейчас — твой шаг имеет значение. Ветер приносит запах моря и... чего-то забытого.\n\nПеред тобой — Cеверные Врата Старого города. Ни стражи, ни толпы. Только ты и древние стены.\n\n\"Если готов — входи.\"",
+      en: "🏰 Chapter I: It Begins at the Gate\n\nThe stone beneath your feet has felt a thousand footsteps. But now — it's yours that matter. The sea breeze brings something... forgotten.\n\nAhead lie the Nothern Gates of the Old Town. No guards. No banners. Just you and the walls.\n\n\"If you're ready, step in.\""
     },
     question: {
-      me: "⏰ Koliko je sati na starom satu?",
-      ru: "⏰ Сколько времени на старых часах?",
-      en: "⏰ What time is on the old clock?"
+      me: "📍 Kako se zovu ova vrata?",
+      ru: "📍 Как называются эти ворота?",
+      en: "📍 What is the name of this gate?"
     },
-    answer: ["10:15", "10.15", "10[-:.\\s]?15", "10\\s15"],
+    answer: ["pizanela", "vrata pizanela", "pizanella", "pizzanela"],
     success: {
-      me: "⏰ Tačno! Sat je zaustavljen u vremenu...",
-      ru: "⏰ Верно! Часы остановились навсегда...",
-      en: "⏰ Correct! The clock is frozen in time..."
+      me: "✅ Vrata su te prepoznala. Počinje priča...",
+      ru: "✅ Врата тебя узнали. История начинается...",
+      en: "✅ The gate recognized you. The story begins..."
     },
     retryMessage: {
-      me: "👀 Pogledaj još jednom. Šta vidiš iznad vrata?",
-      ru: "👀 Присмотрись внимательнее. Что находится над воротами?",
-      en: "👀 Look again. What’s above the gate?"
-    },
-  },
-  {
-    story: {
-      me: "⛪ *Poglavlje II: Zidovi Pamte*\n\nNakon što si odgonetnuo vreme, sledeća poruka vodi te kroz uske ulice ka tihoj kapeli u srcu grada. Vrata su poluotvorena, unutra vlada večna senka.\n\nU tišini hrama čuješ jeku davnih molitvi. Freska na zidu je ispucala, ali ispod nje — ugravirane riječi:\n\"Molili smo se, ali on nije čuo... izabrao je tišinu.\"",
-      ru: "⛪ *Глава II: Стены помнят*\n\nРазгадав время, ты следуешь по узким улочкам к капелле, скрытой в сердце города. Двери приоткрыты, внутри — вечная тень.\n\nВ тишине храма эхом звучат забытые молитвы. Под трещиной фрески — надпись:\n\"Мы молились, но он не услышал... он выбрал молчание.\"",
-      en: "⛪ *Chapter II: The Walls Remember*\n\nHaving solved the time, a hidden path leads you to a quiet chapel nestled in the town’s heart. The door creaks open, revealing shadows of forgotten centuries.\n\nIn the chapel’s hush, whispers of long-lost prayers linger. Beneath the cracked fresco, words are carved:\n\"We prayed, but he never heard... he chose silence.\""
-    },
-    question: {
-      me: "🔤 Koja je prva riječ iznad mozaika?",
-      ru: "🔤 Какое первое слово над мозаикой?",
-      en: "🔤 What is the first word above the mosaic?"
-    },
-    answer: ["pomolimo"],
-    success: {
-      me: "🙏 Tačno. Zid pamti tvoje korake...",
-      ru: "🙏 Верно. Стена помнит твой шаг...",
-      en: "🙏 Correct. The wall remembers you..."
-    },
-    retryMessage: {
-      me: "🗿 Nađi natpis iznad mozaika. Koja je prva riječ?",
-      ru: "🗿 Найди надпись над мозаикой. Что там первое?",
-      en: "🗿 Find the inscription above the mosaic. What’s the first word?"
+      me: "👀 Potraži crvenu tablu. Kako se zovu ta vrata?",
+      ru: "👀 Найди красную табличку. Как называются ворота?",
+      en: "👀 Look for the red sign. What is the name of the gate?"
     }
   },
   {
     story: {
-      me: "⚓ *Poglavlje III: Sidro Tajni*\n\nKapela te pušta napolje kroz zadnji prolaz. Pratiš kamenje obasjano suncem dok ne ugledaš staro sidro pored mora.\n\nLanaca je manje nego što bi očekivao. Na kamenu — poruka:\n\"Ne pokušavaj zadržati ono što želi da ode.\"",
-      ru: "⚓ *Глава III: Якорь Тайн*\n\nТы выходишь из храма через задний двор. По солнечному камню идёшь к набережной, где лежит старый якорь.\n\nЦепей меньше, чем ожидалось. На камне — надпись:\n\"Не пытайся удержать то, что хочет уйти.\"",
-      en: "⚓ *Chapter III: The Anchor of Secrets*\n\nYou exit the chapel through a hidden courtyard. A path leads you to the sea, where an old anchor rests.\n\nFewer chains than expected. Etched on stone:\n\"Don’t try to hold on to what longs to leave.\""
+      me: "🔔 Poglavlje II: Tri Zvona\n\nNa trgu čeka crkva. Njena fasada crveno-bijela, kao zastava zaboravljenog carstva.\n\nGledaj gore. Zvona tiho vise. Kao da broje vrijeme koje je prošlo. Ili ono koje dolazi...",
+      ru: "🔔 Глава II: Три колокола\n\nНа площади — церковь. Красно-белый фасад, как знамя забытой империи.\n\nСмотри вверх. Колокола молчат. Они считают прошедшее время. Или грядущее...",
+      en: "🔔 Chapter II: The Three Bells\n\nIn the square, the church waits. Its red-white façade — like a flag of a forgotten realm.\n\nLook up. The bells hang still. Counting time gone by — or time to come..."
     },
     question: {
-      me: "🔗 Koliko lanaca drži sidro?",
-      ru: "🔗 Сколько цепей держат якорь?",
-      en: "🔗 How many chains hold the anchor?"
+      me: "🔢 Koliko zvona ima iznad ulaza u crkvu?",
+      ru: "🔢 Сколько колоколов над входом в церковь?",
+      en: "🔢 How many bells hang above the church entrance?"
     },
-    answer: ["3", "три", "tri"],
+    answer: ["3", "tri", "три"],
     success: {
-      me: "⚓ Tačno. Ali sidro želi slobodu...",
-      ru: "⚓ Точно. Но якорь мечтает о свободе...",
-      en: "⚓ Correct. But the anchor longs for freedom..."
+      me: "🔔 Tačno. Zvona pamte tvoje ime...",
+      ru: "🔔 Верно. Колокола помнят твоё имя...",
+      en: "🔔 Correct. The bells remember your name..."
     },
     retryMessage: {
-      me: "🔗 Pogledaj sidro. Koliko lanaca ga drži?",
-      ru: "🔗 Посмотри на якорь. Сколько цепей его держит?",
-      en: "🔗 Look at the anchor. How many chains hold it?"
+      me: "🔔 Pogledaj iznad ulaza pažljivo.",
+      ru: "🔔 Посмотри внимательно над входом.",
+      en: "🔔 Look carefully above the entrance."
     }
   },
   {
     story: {
-      me: "🌌 *Završno Poglavlje: Svetionik se Budi*\n\nSa sidra te pogled vodi preko vode — ka ostrvu. Magla se podiže. Krećeš stazom uz obalu, tamo gde kamen gleda ka horizontu.\n\nOdjednom — bljesak. Svetionik... migne.\n\nLegenda je zaokružena. Ali svetlost postavlja pitanje: \"Zašto si došao baš ti?\"",
-      ru: "🌌 *Последняя глава: Пробуждение маяка*\n\nОт якоря взгляд уводит тебя за горизонт. По прибрежной тропе ты идёшь к месту, откуда видно остров.\n\nВдруг — вспышка. Маяк... мигнул.\n\nКруг замкнулся. Но огонь задаёт вопрос: \"Почему именно ты оказался здесь?\"",
-      en: "🌌 *Final Chapter: The Lighthouse Awakens*\n\nFrom the anchor, your gaze follows the sea. You walk the coastal path, drawn toward the horizon.\n\nSuddenly — a flash. The lighthouse... flickers.\n\nThe legend closes its loop. But the light asks: \"Why were you the one to arrive?\""
+      me: "🏰 Poglavlje III: Kamen sa Godinom\n\nKrećeš ka tvrđavi. Njena vrata su zatvorena, ali iznad njih urezano: 'ERBAUT IM JAHRE...'\n\nGodina stoji jasno. Kao da govori: 'Još nije kasno.'",
+      ru: "🏰 Глава III: Камень с годом\n\nТы идёшь к цитадели. Врата закрыты, но над ними высечено: 'ERBAUT IM JAHRE...'\n\nГод указан ясно. Как будто намекает: 'Ещё не поздно.'",
+      en: "🏰 Chapter III: The Carved Year\n\nYou approach the citadel. The doors are shut, but above them is carved: 'ERBAUT IM JAHRE...'\n\nThe year is clear. As if saying: 'It’s not too late.'"
     },
     question: {
-      me: "📸 Pošalji fotografiju ostrva sa obale!",
-      ru: "📸 Пришли фото острова с берега!",
-      en: "📸 Send a photo of the island from the shore!"
+      me: "📅 Koja godina je urezana iznad vrata Citadele?",
+      ru: "📅 Какой год высечен над входом в Цитадель?",
+      en: "📅 What year is carved above the Citadel gate?"
+    },
+    answer: ["1836"],
+    success: {
+      me: "📅 Tačno. Vremena još ima...",
+      ru: "📅 Верно. Время ещё есть...",
+      en: "📅 Correct. There is still time..."
+    },
+    retryMessage: {
+      me: "📜 Pogledaj iznad glavnog ulaza. Godina je tu.",
+      ru: "📜 Посмотри над входом. Там есть дата.",
+      en: "📜 Look above the main entrance. The year is there."
+    }
+  },
+  {
+    story: {
+      me: "🌊 Završno Poglavlje: Pogled sa Kamenog Zida\n\nNa kraju staze — zid koji gleda ka moru. Ostrvo lebdi u daljini, zeleno i usamljeno.\n\nOvde svetionik šapuće vetru. A tvoj zadatak — zabeleži trenutak.\n\nLegenda završava na fotografiji... ako znaš gde da staneš.",
+      ru: "🌊 Финал: Вид с каменной стены\n\nВ конце пути — стена у моря. Остров одиноко покоится вдали.\n\nЗдесь маяк шепчет ветру. А тебе осталось лишь... запечатлеть мгновение.\n\nЛегенда завершается фотографией. Если ты знаешь, где встать.",
+      en: "🌊 Final Chapter: View from the Stone Wall\n\nAt the end of the path — a stone wall facing the sea. The island floats in the distance, green and quiet.\n\nHere, the lighthouse whispers to the wind. And your task — capture the moment.\n\nThe legend ends with a photo. If you know where to stand."
+    },
+    question: {
+      me: "📸 Pošalji fotografiju ostrva sa tačke pored zida!",
+      ru: "📸 Пришли фото острова у стены!",
+      en: "📸 Send a photo of the island from the stone wall!"
     },
     answer: "photo",
     success: {
-      me: "📸 Savršeno! Svetionik te prepoznao...",
-      ru: "📸 Прекрасно! Маяк узнал тебя...",
-      en: "📸 Beautiful! The lighthouse recognized you..."
+      me: "📸 Savršeno. Svetionik ti je namignuo...\nAli more nikad ne ispriča sve.",
+      ru: "📸 Великолепно. Маяк тебе подмигнул...\nНо море никогда не рассказывает всё.",
+      en: "📸 Perfect. The lighthouse winked at you...\nBut the sea never tells the whole story."
     },
     retryMessage: {
-      me: "📷 Pošalji fotografiju ostrva — vidi se sa obale.",
-      ru: "📷 Пришли фото острова — его видно с берега.",
-      en: "📷 Send a photo of the island — it’s visible from the shore."
+      me: "📷 Pošalji fotografiju sa pravim pogledom — ostrvo mora da se vidi.",
+      ru: "📷 Пришли фото с нужным видом — остров должен быть виден.",
+      en: "📷 Send the photo from the correct angle — the island must be visible."
     }
   }
 ];
