@@ -39,6 +39,14 @@ const FULL_WEBHOOK_URL = process.env.WEBHOOK_URL ? `${process.env.WEBHOOK_URL}${
 
 app.get('/', (_, res) => res.send('🏝 Квест-бот живой.'));
 
+app.get('/privacy', (_, res) => {
+  res.send(`
+    <h1>Privacy Policy</h1>
+    <p>This bot does not store any personal data.</p>
+    <p>All interactions are logged for analytics purposes.</p>
+  `);
+});
+
 setInterval(async () => {
   try {
     const count = await cleanupOldUserStates();

@@ -78,6 +78,11 @@ const messages = {
     me: "⚠️ Molimo te da izabereš ocjenu od 1 do 5:",
     ru: "⚠️ Пожалуйста, выбери оценку от 1 до 5:",
     en: "⚠️ Please select a rating from 1 to 5:"
+  },
+  privacy: {
+    me: "🔒 Privatnost je važna. Bot ne čuva lične podatke osim jezika i stanja kvestova. Sve informacije su lokalne i nisu dostupne trećim stranama.",
+    ru: "🔒 Конфиденциальность важна. Бот не хранит личные данные, кроме языка и состояния квестов. Все данные локальны и недоступны третьим лицам.",
+    en: "🔒 Privacy matters. The bot does not store personal data except for language and quest state. All information is local and not shared with third parties."
   }
 };
 

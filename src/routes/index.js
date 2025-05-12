@@ -234,6 +234,11 @@ function initRoutes(bot) {
 
   // Main message handler for text and photos
   bot.on(['text', 'photo'], handleMessage);
+
+  // Privacy command
+  bot.command('privacy', (ctx) => {
+    ctx.reply(messages.privacy[getLang(ctx)]);
+  });
 }
 
 module.exports = initRoutes;
