@@ -1,7 +1,6 @@
 // src/bot.js
 const { Telegraf } = require('telegraf');
 const express = require('express');
-const { Pool } = require('pg');
 const keepAlive = require('./keepAlive');
 const initRoutes = require('./routes');
 const { initDb, cleanupOldUserStates } = require("./db");
@@ -9,17 +8,16 @@ require('dotenv').config();
 
 const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const db = new Pool({ connectionString: process.env.DATABASE_URL });
 const CLEAR_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 const WEBHOOK_PATH = `/bot${process.env.BOT_TOKEN}`;
 const FULL_WEBHOOK_URL = process.env.WEBHOOK_URL ? `${process.env.WEBHOOK_URL}${WEBHOOK_PATH}` : null;
 
-// Инициализация
+// Init
 (async () => {
   try {
     await initDb();
-    initRoutes(bot, db);
+    initRoutes(bot);
 
     if (FULL_WEBHOOK_URL) {
       await bot.telegram.setWebhook(FULL_WEBHOOK_URL);

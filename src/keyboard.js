@@ -52,4 +52,4 @@ const keyboard = {
   ]).oneTime().resize()
 };
 
-module.exports = { keyboard };
+module.exports = { keyboard, keyboardButtons: messages };

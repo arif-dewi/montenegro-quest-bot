@@ -73,6 +73,11 @@ const messages = {
     me: "⚠️ Jezik nije prepoznat. Pokušaj ponovo:",
     ru: "⚠️ Язык не распознан. Попробуй снова:",
     en: "⚠️ Language not recognized. Try again:"
+  },
+  invalid_rating: {
+    me: "⚠️ Molimo te da izabereš ocjenu od 1 do 5:",
+    ru: "⚠️ Пожалуйста, выбери оценку от 1 до 5:",
+    en: "⚠️ Please select a rating from 1 to 5:"
   }
 };
 
