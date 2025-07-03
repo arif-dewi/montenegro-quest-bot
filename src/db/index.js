@@ -5,7 +5,8 @@ const { Pool } = require('pg');
 const db = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // For Render, Glitch, etc.
+    // For Render, Glitch, etc. For the local development, you can set this to false
+    rejectUnauthorized: true,
   },
 });
 const PREFIX = process.env.BOT_PREFIX || 'bot';
