@@ -13,7 +13,7 @@ const {
  * Escape MarkdownV2 characters
  */
 function escapeMarkdownV2(text) {
-  return text.replace(/([_*\[\]()~`>#+=|{}.!\\-])/g, '\\$1');
+  return text.replace(/([_*[\]()~`>#+=|{}.!\\-])/g, '\\$1');
 }
 
 /**
