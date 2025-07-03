@@ -1,5 +1,7 @@
 # 🗺️ Budva Quest Bot
 
+![Lint](https://github.com/arif-dewi/montenegro-quest-bot/actions/workflows/lint.yml/badge.svg)
+
 A **multilingual Telegram bot** that guides users through a real-world mystery quest in the old town of **Budva, Montenegro** — mixing folklore, geolocation, and interactive storytelling.
 
 > Noir-pirate aesthetics, personalized certificates, and immersive puzzles — all packed in a Telegram experience.
