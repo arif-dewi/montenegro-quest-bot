@@ -1,5 +1,4 @@
 .idea
 node_modules
-.env.example
 .env
 feedback.json
