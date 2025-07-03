@@ -1,14 +1,19 @@
 const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 
-registerFont(path.join(__dirname, 'fonts', 'OldEnglish.ttf'), { family: 'OldEnglish' });
-registerFont(path.join(__dirname, 'fonts', 'BlackChancery.ttf'), { family: 'BlackChancery' });
+// Register fonts
+registerFont(path.join(__dirname, 'fonts', 'OldEnglish.ttf'), {
+  family: 'OldEnglish',
+});
+registerFont(path.join(__dirname, 'fonts', 'BlackChancery.ttf'), {
+  family: 'BlackChancery',
+});
 
 /**
- * Generates a clean and elegant certificate like in image2.png
- * @param {string} name - Player name
- * @param {string} lang - Language code (en, ru, me)
- * @returns {Buffer} - PNG buffer
+ * Generates a certificate image with user name and localized text
+ * @param {string} name - Player's name
+ * @param {string} lang - Language code ('en', 'ru', 'me')
+ * @returns {Promise<Buffer>} PNG buffer of the certificate
  */
 const generateCertificate = async (name, lang = 'en') => {
   const width = 800;
@@ -16,10 +21,16 @@ const generateCertificate = async (name, lang = 'en') => {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
 
-  // Load background
-  const background = await loadImage(path.join(__dirname, 'back.png'));
-  ctx.drawImage(background, 0, 0, width, height);
+  try {
+    // Load and draw background image
+    const background = await loadImage(path.join(__dirname, 'back.png'));
+    ctx.drawImage(background, 0, 0, width, height);
+  } catch (error) {
+    console.error('❌ Failed to load certificate background:', error);
+    throw new Error('Background image missing or unreadable');
+  }
 
+  // Localized text content
   const textMap = {
     en: {
       title: 'Certificate',
@@ -41,7 +52,7 @@ const generateCertificate = async (name, lang = 'en') => {
       line2: 'potragu',
       quest: 'Signal sa\nSvetionika',
       location: 'Budva, Crna Gora',
-    }
+    },
   };
 
   const text = textMap[lang] || textMap.en;
@@ -54,16 +65,16 @@ const generateCertificate = async (name, lang = 'en') => {
   ctx.font = '70px OldEnglish';
   ctx.fillText(text.title, centerX, 200);
 
-  // Name
+  // Player name
   ctx.font = '55px BlackChancery';
   ctx.fillText(name, centerX, 290);
 
-  // Quest lines
+  // Subtitle lines
   ctx.font = '30px serif';
   ctx.fillText(text.line1, centerX, 370);
   ctx.fillText(text.line2, centerX, 410);
 
-  // Quest Title
+  // Quest title
   ctx.font = 'bold 42px OldEnglish';
   const questLines = text.quest.split('\n');
   ctx.fillText(questLines[0], centerX, 490);
@@ -73,14 +84,12 @@ const generateCertificate = async (name, lang = 'en') => {
   ctx.font = '28px serif';
   ctx.fillText(text.location, centerX, 630);
 
-  // Date
+  // Localized date
   const today = new Date();
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  const dateStr = today.toLocaleDateString(
-    lang === 'ru' ? 'ru-RU' : lang === 'me' ? 'sr-ME' : 'en-US',
-    options
-  );
-  ctx.fillText(`${dateStr}`, centerX, 680);
+  const locale = lang === 'ru' ? 'ru-RU' : lang === 'me' ? 'sr-ME' : 'en-US';
+  const dateStr = today.toLocaleDateString(locale, options);
+  ctx.fillText(dateStr, centerX, 680);
 
   return canvas.toBuffer();
 };

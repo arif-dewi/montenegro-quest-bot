@@ -1,11 +1,13 @@
-// steps.js
-
+/**
+ * Quest storyline steps with localized text.
+ * Each step includes: story, question, answer(s), success and retry messages.
+ */
 const steps = [
   {
     story: {
-      me: "🏰 Poglavlje I: Vratima sve počinje\n\nKamen pod tvojim nogama već pamti hiljade koraka. Ali sada — ti si taj koji dolazi ne slučajno. Vjetar nosi miris mora i nešto... zaboravljeno.\n\nPred tobom su Sjeverna Vrata Starog grada. Bez pompe, bez čuvara. Samo ti i stari zidovi.\n\n\"Ako si spreman, uđi.\"",
-      ru: "🏰 Глава I: Всё начинается с Врат\n\nКамень под ногами хранит тысячи шагов. Но сейчас — твой шаг имеет значение. Ветер приносит запах моря и... чего-то забытого.\n\nПеред тобой — Cеверные Врата Старого города. Ни стражи, ни толпы. Только ты и древние стены.\n\n\"Если готов — входи.\"",
-      en: "🏰 Chapter I: It Begins at the Gate\n\nThe stone beneath your feet has felt a thousand footsteps. But now — it's yours that matter. The sea breeze brings something... forgotten.\n\nAhead lie the Nothern Gates of the Old Town. No guards. No banners. Just you and the walls.\n\n\"If you're ready, step in.\""
+      me: "🏰 Poglavlje I: Vratima sve počinje\n\nKamen pod tvojim nogama već pamti hiljade koraka. Ali sada — ti si taj koji dolazi ne slučajno...",
+      ru: "🏰 Глава I: Всё начинается с Врат\n\nКамень под ногами хранит тысячи шагов. Но сейчас — твой шаг имеет значение...",
+      en: "🏰 Chapter I: It Begins at the Gate\n\nThe stone beneath your feet has felt a thousand footsteps. But now — it's yours that matter..."
     },
     question: {
       me: "📍 Kako se zovu ova vrata?",
@@ -26,9 +28,9 @@ const steps = [
   },
   {
     story: {
-      me: "🔔 Poglavlje II: Tri Zvona\n\nNa trgu čeka crkva. Njena fasada crveno-bijela, kao zastava zaboravljenog carstva.\n\nGledaj gore. Zvona tiho vise. Kao da broje vrijeme koje je prošlo. Ili ono koje dolazi...",
-      ru: "🔔 Глава II: Три колокола\n\nНа площади — церковь. Красно-белый фасад, как знамя забытой империи.\n\nСмотри вверх. Колокола молчат. Они считают прошедшее время. Или грядущее...",
-      en: "🔔 Chapter II: The Three Bells\n\nIn the square, the church waits. Its red-white façade — like a flag of a forgotten realm.\n\nLook up. The bells hang still. Counting time gone by — or time to come..."
+      me: "🔔 Poglavlje II: Zvona\n\nNa trgu čeka crkva...",
+      ru: "🔔 Глава II: Колокола\n\nНа площади — церковь...",
+      en: "🔔 Chapter II: The Bells\n\nIn the square, the church waits..."
     },
     question: {
       me: "🔢 Koliko zvona ima iznad ulaza u crkvu?",
@@ -49,9 +51,9 @@ const steps = [
   },
   {
     story: {
-      me: "🏰 Poglavlje III: Kamen sa Godinom\n\nKrećeš ka tvrđavi. Njena vrata su zatvorena, ali iznad njih urezano: 'ERBAUT IM JAHRE...'\n\nGodina stoji jasno. Kao da govori: 'Još nije kasno.'",
-      ru: "🏰 Глава III: Камень с годом\n\nТы идёшь к цитадели. Врата закрыты, но над ними высечено: 'ERBAUT IM JAHRE...'\n\nГод указан ясно. Как будто намекает: 'Ещё не поздно.'",
-      en: "🏰 Chapter III: The Carved Year\n\nYou approach the citadel. The doors are shut, but above them is carved: 'ERBAUT IM JAHRE...'\n\nThe year is clear. As if saying: 'It’s not too late.'"
+      me: "🏰 Poglavlje III: Kamen sa Godinom\n\nKrećeš ka tvrđavi...",
+      ru: "🏰 Глава III: Камень с годом\n\nТы идёшь к цитадели...",
+      en: "🏰 Chapter III: The Carved Year\n\nYou approach the citadel..."
     },
     question: {
       me: "📅 Koja godina je urezana iznad vrata Citadele?",
@@ -72,9 +74,9 @@ const steps = [
   },
   {
     story: {
-      me: "🌊 Završno Poglavlje: Pogled sa Kamenog Zida\n\nNa kraju staze — zid koji gleda ka moru. Ostrvo lebdi u daljini, zeleno i usamljeno.\n\nOvde svetionik šapuće vetru. A tvoj zadatak — zabeleži trenutak.\n\nLegenda završava na fotografiji... ako znaš gde da staneš.",
-      ru: "🌊 Финал: Вид с каменной стены\n\nВ конце пути — стена у моря. Остров одиноко покоится вдали.\n\nЗдесь маяк шепчет ветру. А тебе осталось лишь... запечатлеть мгновение.\n\nЛегенда завершается фотографией. Если ты знаешь, где встать.",
-      en: "🌊 Final Chapter: View from the Stone Wall\n\nAt the end of the path — a stone wall facing the sea. The island floats in the distance, green and quiet.\n\nHere, the lighthouse whispers to the wind. And your task — capture the moment.\n\nThe legend ends with a photo. If you know where to stand."
+      me: "🌊 Završno Poglavlje: Pogled sa Kamenog Zida\n\nNa kraju staze — zid koji gleda ka moru...",
+      ru: "🌊 Финал: Вид с каменной стены\n\nВ конце пути — стена у моря...",
+      en: "🌊 Final Chapter: View from the Stone Wall\n\nAt the end of the path — a stone wall facing the sea..."
     },
     question: {
       me: "📸 Pošalji fotografiju ostrva sa tačke pored zida!",
@@ -95,11 +97,19 @@ const steps = [
   }
 ];
 
+/**
+ * Auto-detect user language code from Telegram context
+ * @param {import('telegraf').Context} ctx
+ * @returns {'ru' | 'me' | 'en'}
+ */
 function getLang(ctx) {
-  const lang = ctx?.from?.language_code || 'en';
+  const lang = ctx?.from?.language_code?.toLowerCase() || 'en';
   if (/^ru/.test(lang)) return 'ru';
-  if (/^sr|me|bs|hr/.test(lang)) return 'me';
+  if (/^(sr|me|bs|hr)/.test(lang)) return 'me';
   return 'en';
 }
 
-module.exports = { steps, getLang };
+module.exports = {
+  steps,
+  getLang
+};

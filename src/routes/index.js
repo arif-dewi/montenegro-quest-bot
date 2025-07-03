@@ -9,10 +9,16 @@ const {
   saveFeedback
 } = require('../db');
 
+/**
+ * Escape MarkdownV2 characters
+ */
 function escapeMarkdownV2(text) {
   return text.replace(/([_*\[\]()~`>#+=|{}.!\\-])/g, '\\$1');
 }
 
+/**
+ * Called when user completes all quest steps
+ */
 async function finishQuest(ctx, userId) {
   const userProgress = await getUserState(userId);
   const lang = userProgress.lang || 'en';
@@ -40,38 +46,40 @@ async function finishQuest(ctx, userId) {
 
     await setUserState(userId, { ...userProgress, step: 'feedback_rating' });
   } catch (e) {
-    console.error('❌ Certificate error:', e.message);
+    console.error('❌ Certificate generation error:', e.message);
     await ctx.reply(messages.cert_fail?.[lang] || '❌ Certificate generation failed.');
   }
 }
 
-// Handle language selection
+/**
+ * Handles language selection at the start
+ */
 async function handleLanguageSelection(ctx) {
   const selected = ctx.message.text;
   const lang =
     selected.includes('Рус') ? 'ru' :
-      selected.includes('Crnogorski') ? 'me' :
-        'en';
+      selected.includes('Crnogorski') ? 'me' : 'en';
 
   await setUserState(ctx.chat.id, { step: 0, lang });
-  await incrementCounter('lang:' + lang);
+  await incrementCounter(`lang:${lang}`);
 
   const step = steps[0];
   await ctx.reply(messages.welcome[lang] || 'Welcome to the quest!');
-  await Promise.resolve(setTimeout(() => {}, 500));
-
+  await new Promise(resolve => setTimeout(resolve, 500));
   await ctx.replyWithMarkdownV2(escapeMarkdownV2(step.story[lang]));
   await ctx.reply(step.question[lang], keyboard.main(lang));
 }
 
-// Handle feedback rating
+/**
+ * Handles star-rating input from user
+ */
 async function handleFeedbackRating(ctx, user) {
   const input = ctx.message.text || '';
   const lang = user.lang || 'en';
-  const ratingMatch = input.match(/⭐️ (\d)/);
+  const match = input.match(/⭐️ (\d)/);
 
-  if (ratingMatch) {
-    const rating = parseInt(ratingMatch[1]);
+  if (match) {
+    const rating = parseInt(match[1], 10);
     await setUserState(ctx.chat.id, {
       ...user,
       step: 'feedback_comment',
@@ -86,33 +94,33 @@ async function handleFeedbackRating(ctx, user) {
   }
 }
 
-// Handle feedback comment
+/**
+ * Handles feedback comment input
+ */
 async function handleFeedbackComment(ctx, user) {
   const chatId = ctx.chat.id;
   const input = ctx.message.text || '';
   const lang = user.lang || 'en';
   const rating = user.feedback?.rating;
 
-  // Save feedback with the correct parameter structure
   await saveFeedback(chatId, {
-    rating: rating,
+    rating,
     comment: input,
-    lang: lang
+    lang
   });
 
   await ctx.reply(messages.end_feedback[lang] || 'Thank you for your feedback!');
   await setUserState(chatId, { step: 'completed', lang });
 
-  // restart
+  // Restart the quest
   await new Promise(resolve => setTimeout(resolve, 500));
   await setUserState(chatId, { step: -1 });
-  await ctx.reply(
-    messages.reset?.[lang] || 'You can restart the quest anytime.',
-    keyboard.start(lang)
-  );
+  await ctx.reply(messages.reset?.[lang] || 'You can restart the quest anytime.', keyboard.start(lang));
 }
 
-// Handle quest steps
+/**
+ * Handles a regular quest step
+ */
 async function handleQuestStep(ctx, user) {
   const chatId = ctx.chat.id;
   const lang = user.lang || 'en';
@@ -120,14 +128,14 @@ async function handleQuestStep(ctx, user) {
   const step = steps[user.step];
 
   if (!step) {
-    await ctx.reply('🏁 Квест завершён. Можешь начать заново.', keyboard.start(lang));
+    await ctx.reply('🏁 The quest is complete. You can restart anytime.', keyboard.start(lang));
     await setUserState(chatId, { step: -1 });
     return;
   }
 
   const isPhoto = !!ctx.message.photo;
   const isCorrect = Array.isArray(step.answer)
-    ? step.answer.some(pattern => new RegExp(pattern, 'i').test(input))
+    ? step.answer.some((pattern) => new RegExp(pattern, 'i').test(input))
     : step.answer === 'photo' && isPhoto;
 
   if (isCorrect) {
@@ -140,102 +148,100 @@ async function handleQuestStep(ctx, user) {
 
     if (nextStep) {
       await ctx.replyWithMarkdownV2(escapeMarkdownV2(nextStep.story[lang]));
-      await ctx.reply(
-        nextStep.question[lang],
-        nextStep.keyboard || keyboard.main(lang)
-      );
+      await ctx.reply(nextStep.question[lang], nextStep.keyboard || keyboard.main(lang));
     } else {
       await finishQuest(ctx, chatId);
     }
   } else {
-    await ctx.reply(step.retryMessage?.[lang] || '❌ Неверно. Попробуй ещё раз.');
+    await ctx.reply(step.retryMessage?.[lang] || '❌ Incorrect. Try again.');
   }
 }
 
-// Main message handler
+/**
+ * Handles any incoming text or photo message
+ */
 async function handleMessage(ctx) {
   try {
     const chatId = ctx.chat.id;
     const user = await getUserState(chatId);
     const lang = user.lang || getLang(ctx);
 
-    // If this is a command, let it be handled by command handlers
+    // Skip command handlers
     if (ctx.message.text?.startsWith('/')) return;
 
-    // Language selection needed
     if (user.step === -1) {
       await ctx.reply(
-        '🌍 Пожалуйста, выбери язык. ' +
-        'Select your language. ' +
-        'Izaberi jezik. '
-        , keyboard.lang);
+        '🌍 Please select a language. ' +
+        'Выбери язык. ' +
+        'Izaberi jezik.',
+        keyboard.lang
+      );
       return;
     }
 
-    // Handle different steps based on user state
     switch (user.step) {
       case 'feedback_rating':
         await handleFeedbackRating(ctx, user);
         break;
-
       case 'feedback_comment':
         await handleFeedbackComment(ctx, user);
         break;
-
       case 'completed':
         await ctx.reply(
           messages.quest_already_completed?.[lang] || 'You have already completed the quest.',
           keyboard.start(lang)
         );
         break;
-
       default:
-        // Handle regular numbered quest steps
         if (typeof user.step === 'number') {
           await handleQuestStep(ctx, user);
         }
     }
   } catch (err) {
-    console.error('❌ Ошибка маршрута:', err);
-    await ctx.reply('🚧 Что-то пошло не так. Попробуй ещё раз.');
+    console.error('❌ Message handler error:', err);
+    await ctx.reply('🚧 Something went wrong. Please try again.');
   }
 }
 
+// Reset user state
 const reset = async (ctx) => {
   await setUserState(ctx.chat.id, { step: -1 });
   const lang = getLang(ctx);
-  ctx.reply(messages.reset[lang], keyboard.start(lang));
-}
+  await ctx.reply(messages.reset[lang], keyboard.start(lang));
+};
 
+// Help command handler
 const help = async (ctx) => {
   const lang = getLang(ctx);
-  ctx.reply(messages.help[lang], keyboard.main(lang));
-}
+  await ctx.reply(messages.help[lang], keyboard.main(lang));
+};
 
-// Initialize all bot routes
+/**
+ * Initializes all bot routes and handlers
+ */
 function initRoutes(bot) {
   // Start command
   bot.start(async (ctx) => {
     await setUserState(ctx.chat.id, { step: -1 });
     await incrementCounter('start');
-    await ctx.reply('🌍 Выбери язык / Select your language / Izaberi jezik:', keyboard.lang);
+    await ctx.reply('🌍 Please select a language / Выбери язык / Izaberi jezik:', keyboard.lang);
   });
 
   // Language selection
   bot.hears(['🇷🇺 Русский', '🇲🇪 Crnogorski', '🇬🇧 English'], handleLanguageSelection);
 
-  // Handle reset
+  // Reset handlers
   bot.hears(Object.values(keyboardButtons.reset), reset);
   bot.command('reset', reset);
 
-  // Handle help
+  // Help handlers
   bot.hears(Object.values(keyboardButtons.help), help);
   bot.command('help', help);
 
-  // Main message handler for text and photos
+  // Main message handler
   bot.on(['text', 'photo'], handleMessage);
 
-  // Privacy command
+  // Privacy policy
   bot.command('privacy', (ctx) => {
     ctx.reply(messages.privacy[getLang(ctx)]);
   });

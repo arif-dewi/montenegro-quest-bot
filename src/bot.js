@@ -1,60 +1,72 @@
 // src/bot.js
-const { Telegraf } = require('telegraf');
+require('dotenv').config();
 const express = require('express');
+const { Telegraf } = require('telegraf');
 const keepAlive = require('./keepAlive');
 const initRoutes = require('./routes');
-const { initDb, cleanupOldUserStates } = require("./db");
-require('dotenv').config();
+const { initDb, cleanupOldUserStates } = require('./db');
 
 const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
-const CLEAR_INTERVAL = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+const PORT = process.env.PORT || 3000;
+const CLEAR_INTERVAL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 const WEBHOOK_PATH = `/bot${process.env.BOT_TOKEN}`;
-const FULL_WEBHOOK_URL = process.env.WEBHOOK_URL ? `${process.env.WEBHOOK_URL}${WEBHOOK_PATH}` : null;
+const FULL_WEBHOOK_URL = process.env.WEBHOOK_URL
+  ? `${process.env.WEBHOOK_URL}${WEBHOOK_PATH}`
+  : null;
 
-// Init
 (async () => {
   try {
+    // Initialize database and bot routes
     await initDb();
     initRoutes(bot);
 
     if (FULL_WEBHOOK_URL) {
+      // Use webhook mode if URL is provided
       await bot.telegram.setWebhook(FULL_WEBHOOK_URL);
       app.use(bot.webhookCallback(WEBHOOK_PATH));
-      console.log(`🚀 Webhook установлен: ${FULL_WEBHOOK_URL}`);
+      console.log(`🚀 Webhook set: ${FULL_WEBHOOK_URL}`);
     } else {
+      // Fallback to polling mode
       await bot.launch();
-      console.log('🚀 Бот запущен в режиме polling');
+      console.log('🚀 Bot launched in polling mode');
     }
 
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => console.log(`🌐 Сервер слушает на порту ${PORT}`));
+    // Start Express server
+    app.listen(PORT, () => console.log(`🌐 Server listening on port ${PORT}`));
+
+    // Keep alive if webhook is used (for platforms like Replit/Glitch)
     if (FULL_WEBHOOK_URL) keepAlive(process.env.WEBHOOK_URL);
-  } catch (err) {
-    console.error('❌ Ошибка запуска:', err);
+  } catch (error) {
+    console.error('❌ Failed to launch bot:', error);
     process.exit(1);
   }
 })();
 
-app.get('/', (_, res) => res.send('🏝 Квест-бот живой.'));
+// Health check endpoint
+app.get('/', (_, res) => res.send('🏝 Quest bot is alive.'));
 
+// Privacy policy endpoint
 app.get('/privacy', (_, res) => {
   res.send(`
     <h1>Privacy Policy</h1>
     <p>This bot does not store any personal data.</p>
-    <p>All interactions are logged for analytics purposes.</p>
+    <p>All interactions are logged anonymously for analytics.</p>
   `);
 });
 
+// Periodic cleanup of old states
 setInterval(async () => {
   try {
-    const count = await cleanupOldUserStates();
-    console.log(`🧹 Очистка: ${count} старых записей удалено.`);
+    const removed = await cleanupOldUserStates();
+    console.log(`🧹 Cleanup: removed ${removed} outdated user states.`);
   } catch (err) {
-    console.error('❌ Очистка не удалась:', err);
+    console.error('❌ Cleanup failed:', err);
   }
-}, CLEAR_INTERVAL);
+}, CLEAR_INTERVAL_MS);
 
+// Graceful shutdown
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));

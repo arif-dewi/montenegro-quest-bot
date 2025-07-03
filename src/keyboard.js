@@ -1,55 +1,73 @@
 const { Markup } = require('telegraf');
 
-const messages = {
-  startButton: {
+// Localized button labels
+const labels = {
+  start: {
     ru: '🌊 Начать квест',
     en: '🌊 Start the quest',
-    me: '🌊 Počni potragu'
+    me: '🌊 Počni potragu',
   },
   reset: {
     ru: '🔁 Сброс',
     en: '🔁 Reset',
-    me: '🔁 Resetuj'
+    me: '🔁 Resetuj',
   },
   help: {
     ru: '❓ Помощь',
     en: '❓ Help',
-    me: '❓ Pomoć'
+    me: '❓ Pomoć',
   },
   test: {
     ru: '🧪 Тест грамоты',
     en: '🧪 Test Certificate',
-    me: '🧪 Test Sertifikat'
-  }
-}
+    me: '🧪 Test Sertifikat',
+  },
+};
 
+// Keyboard markup builders
 const keyboard = {
   /**
-   * Returns the main keyboard based on language
-   * @param {string} lang - Language code ('ru', 'en', 'me')
+   * Main in-quest keyboard: Reset + Help
    */
   main: (lang) =>
     Markup.keyboard([
-      [messages.reset[lang]],
-      [messages.help[lang]],
+      [labels.reset[lang]],
+      [labels.help[lang]],
     ]).resize(),
 
+  /**
+   * Start screen keyboard: Start + Help
+   */
   start: (lang) =>
     Markup.keyboard([
-      [messages.startButton[lang]],
-      [messages.help[lang]],
+      [labels.start[lang]],
+      [labels.help[lang]],
     ]).resize(),
 
+  /**
+   * Language selector (one-time keyboard)
+   */
   lang: Markup.keyboard([
     ['🇲🇪 Crnogorski'],
     ['🇷🇺 Русский'],
-    ['🇬🇧 English']
-  ]).oneTime().resize(),
+    ['🇬🇧 English'],
+  ])
+    .oneTime()
+    .resize(),
 
+  /**
+   * Star rating keyboard (feedback)
+   */
   feedback: Markup.keyboard([
     ['⭐️ 1', '⭐️ 2', '⭐️ 3'],
-    ['⭐️ 4', '⭐️ 5']
-  ]).oneTime().resize()
+    ['⭐️ 4', '⭐️ 5'],
+  ])
+    .oneTime()
+    .resize(),
 };
 
-module.exports = { keyboard, keyboardButtons: messages };
+// Export buttons separately for "hears" matching
+module.exports = {
+  keyboard,
+  keyboardButtons: labels,
+};
