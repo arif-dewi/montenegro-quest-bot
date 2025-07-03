@@ -1,6 +1,5 @@
 {
   "name": "montenegro-quest-bot",
-  "type": "module",
   "version": "1.0.0",
   "description": "A multilingual Telegram quest bot in noir-pirate style for Montenegro.",
   "main": "src/bot.js",
